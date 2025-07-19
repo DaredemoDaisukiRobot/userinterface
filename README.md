@@ -47,6 +47,26 @@
 
 ---
 
+### 3. `/User/Delete`
+
+**Request 範例**
+```json
+{
+  "ID": 114514,
+  "password": "msg_is_king_of_flavor"
+}
+```
+
+**Response 範例**
+```json
+{
+  "message": "登入成功",
+  "username": "bigred"
+}
+```
+
+---
+
 ## 密碼加密方法
 
 - 註冊時會自動產生一組隨機 salt（儲存於 `msg` 欄位）

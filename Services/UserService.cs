@@ -24,30 +24,45 @@ namespace userinterface.Services
         public async Task<int> RegisterAsync(UserRegistrationRequest request)
         {
             using var connection = new MySqlConnection(_connectionString);
-            // 產生隨機 salt
+
+            // 產生隨機 salt 並雜湊密碼
             var salt = Guid.NewGuid().ToString("N");
             var hash = HashPassword(request.Password ?? "", salt);
 
+            // 準備參數
+            var parameters = new DynamicParameters();
+            parameters.Add("Username", request.username);
+            parameters.Add("Password", hash);
+            parameters.Add("Msg", salt);
+
+            // 如果有 status，才加入參數
+            bool hasStatus = !string.IsNullOrEmpty(request.status);
+            if (hasStatus)
+                parameters.Add("Status", request.status);
+
+            string sql;
             int userId;
+
             if (request.ID.HasValue)
             {
-                // 優先使用傳入的 ID
-                string sql = "INSERT INTO users (id, name, password_hash, msg) VALUES (@Id, @Username, @Password, @Msg);";
-                await connection.ExecuteAsync(
-                    sql,
-                    new { Id = request.ID.Value, Username = request.username, Password = hash, Msg = salt }
-                );
+                parameters.Add("Id", request.ID.Value);
+
+                sql = hasStatus
+                    ? "INSERT INTO users (id, name, password_hash, msg, status) VALUES (@Id, @Username, @Password, @Msg, @Status);"
+                    : "INSERT INTO users (id, name, password_hash, msg) VALUES (@Id, @Username, @Password, @Msg);";
+
+                await connection.ExecuteAsync(sql, parameters);
                 userId = request.ID.Value;
             }
             else
             {
-                // 沒有傳入 ID 則自動產生
-                string sql = "INSERT INTO users (name, password_hash, msg) VALUES (@Username, @Password, @Msg); SELECT LAST_INSERT_ID();";
-                userId = await connection.ExecuteScalarAsync<int>(
-                    sql,
-                    new { Username = request.username, Password = hash, Msg = salt }
-                );
+                sql = hasStatus
+                    ? "INSERT INTO users (name, password_hash, msg, status) VALUES (@Username, @Password, @Msg, @Status); SELECT LAST_INSERT_ID();"
+                    : "INSERT INTO users (name, password_hash, msg) VALUES (@Username, @Password, @Msg); SELECT LAST_INSERT_ID();";
+
+                userId = await connection.ExecuteScalarAsync<int>(sql, parameters);
             }
+
             return userId;
         }
 
@@ -63,6 +78,35 @@ namespace userinterface.Services
                 return (true, result.name);
             else
                 return (false, null);
+        }
+
+        public async Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+
+            // 驗證管理員帳號密碼與權限
+            string adminSql = "SELECT password_hash, msg, status FROM users WHERE id = @AdminId";
+            var admin = await connection.QueryFirstOrDefaultAsync<(string password_hash, string msg, string status)>(
+                adminSql, new { AdminId = request.admin_ID });
+
+            if (admin.password_hash == null || admin.msg == null)
+                return (false, "帳號不存在");
+
+            if (admin.status != "admin")
+                return (false, "權限不足");
+
+            var adminHash = HashPassword(request.admin_pwd ?? "", admin.msg);
+            if (adminHash != admin.password_hash)
+                return (false, "密碼錯誤");
+
+            // 刪除使用者
+            string deleteSql = "DELETE FROM users WHERE id = @UserId";
+            int affected = await connection.ExecuteAsync(deleteSql, new { UserId = request.user_ID });
+
+            if (affected > 0)
+                return (true, "刪除成功");
+            else
+                return (false, "找不到使用者");
         }
     }
 }

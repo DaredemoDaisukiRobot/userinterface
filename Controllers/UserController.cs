@@ -47,5 +47,19 @@ namespace userinterface.Controllers
             else
                 return Unauthorized(new { Message = "登入失敗，帳號或密碼錯誤" });
         }
+
+        // POST: /User/Delete
+        [HttpPost("Delete")]
+        public async Task<IActionResult> Delete([FromBody] UserDeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var (success, message) = await _userService.DeleteUserAsync(request);
+            if (success)
+                return Ok(new { Message = message });
+            else
+                return BadRequest(new { Message = message });
+        }
     }
 }

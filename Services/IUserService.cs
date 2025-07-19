@@ -7,5 +7,6 @@ namespace userinterface.Services
     {
         Task<int> RegisterAsync(UserRegistrationRequest request);
         Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request);
+        Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request);
     }
 }
