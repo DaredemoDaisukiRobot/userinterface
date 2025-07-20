@@ -20,4 +20,15 @@ namespace userinterface.Models
         public string admin_pwd { get; set; }
         public int user_ID { get; set; }
     }
+
+    public class UserRegistrationResult
+    {
+        public int UserId { get; set; }
+        public string? Status { get; set; }
+    }
+    public class UserBasicInfo
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+    }
 }

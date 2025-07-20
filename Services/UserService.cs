@@ -21,7 +21,7 @@ namespace userinterface.Services
             return Convert.ToBase64String(hash);
         }
 
-        public async Task<int> RegisterAsync(UserRegistrationRequest request)
+        public async Task<UserRegistrationResult> RegisterAsync(UserRegistrationRequest request)
         {
             using var connection = new MySqlConnection(_connectionString);
 
@@ -35,7 +35,6 @@ namespace userinterface.Services
             parameters.Add("Password", hash);
             parameters.Add("Msg", salt);
 
-            // 如果有 status，才加入參數
             bool hasStatus = !string.IsNullOrEmpty(request.status);
             if (hasStatus)
                 parameters.Add("Status", request.status);
@@ -63,7 +62,14 @@ namespace userinterface.Services
                 userId = await connection.ExecuteScalarAsync<int>(sql, parameters);
             }
 
-            return userId;
+            string statusSql = "SELECT status FROM users WHERE id = @Id";
+            var status = await connection.ExecuteScalarAsync<string>(statusSql, new { Id = userId });
+
+            return new UserRegistrationResult
+            {
+                UserId = userId,
+                Status = status
+            };
         }
 
         public async Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request)
@@ -97,7 +103,7 @@ namespace userinterface.Services
 
             var adminHash = HashPassword(request.admin_pwd ?? "", admin.msg);
             if (adminHash != admin.password_hash)
-                return (false, "密碼錯誤");
+                return (false, "帳號或密碼錯誤");
 
             // 刪除使用者
             string deleteSql = "DELETE FROM users WHERE id = @UserId";
@@ -107,6 +113,15 @@ namespace userinterface.Services
                 return (true, "刪除成功");
             else
                 return (false, "找不到使用者");
+        }
+        public async Task<IEnumerable<UserBasicInfo>> GetAllUsersAsync()
+        {
+            using var connection = new MySqlConnection(_connectionString);
+
+            var sql = "SELECT id, name FROM users";
+            var users = await connection.QueryAsync<UserBasicInfo>(sql); // 只對應 id 和 name 就可以
+
+            return users;
         }
     }
 }

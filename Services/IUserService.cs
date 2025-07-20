@@ -5,8 +5,9 @@ namespace userinterface.Services
 {
     public interface IUserService
     {
-        Task<int> RegisterAsync(UserRegistrationRequest request);
+        Task<UserRegistrationResult> RegisterAsync(UserRegistrationRequest request);
         Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request);
         Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request);
+        Task<IEnumerable<UserBasicInfo>> GetAllUsersAsync();
     }
 }

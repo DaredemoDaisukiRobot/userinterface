@@ -13,7 +13,8 @@
 {
   "ID": 114514,  // 可選
   "username": "bigred",
-  "password": "msg_is_king_of_flavor"
+  "password": "msg_is_king_of_flavor",
+  "status":"admin" // 可選
 }
 ```
 
@@ -21,7 +22,8 @@
 ```json
 {
   "message": "註冊成功",
-  "userId": 114514
+  "userId": 114514,
+  "status": "admin"
 }
 ```
 
@@ -52,16 +54,18 @@
 **Request 範例**
 ```json
 {
-  "ID": 114514,
-  "password": "msg_is_king_of_flavor"
+    "admin_ID": 20050224,
+    "admin_pwd":"kang0926",
+    "user_ID":114514
 }
 ```
 
 **Response 範例**
 ```json
 {
-  "message": "登入成功",
-  "username": "bigred"
+    "admin_ID": 20050224,
+    "admin_pwd":"kang0926",
+    "user_ID":114514
 }
 ```
 

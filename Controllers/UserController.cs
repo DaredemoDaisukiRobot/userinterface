@@ -10,7 +10,7 @@ namespace userinterface.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        
+
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -25,8 +25,8 @@ namespace userinterface.Controllers
 
             try
             {
-                int userId = await _userService.RegisterAsync(request);
-                return Ok(new { Message = "註冊成功", UserId = userId });
+                var result = await _userService.RegisterAsync(request);
+                return Ok(new { Message = "註冊成功", UserId = result.UserId, Status = result.Status });
             }
             catch (System.Exception ex)
             {
@@ -60,6 +60,13 @@ namespace userinterface.Controllers
                 return Ok(new { Message = message });
             else
                 return BadRequest(new { Message = message });
+        }
+        // GET: /User/all
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<UserBasicInfo>>> GetAllUsers()
+        {
+           var users = await _userService.GetAllUsersAsync();
+           return Ok(users);
         }
     }
 }
