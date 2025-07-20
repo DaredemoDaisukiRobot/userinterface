@@ -124,3 +124,4 @@ User.cs (資料模型)
 - 未來嘗試使用jwt token保留使用者資料
 - 改用dto來傳輸
 - 使用orm框架取代SQL語法操作
+- 將\delet的post方法改成delete
