@@ -35,7 +35,7 @@
 **Request 範例**
 ```json
 {
-  "ID": 114514,
+  "email": "kang0926@gmail.com",
   "password": "msg_is_king_of_flavor"
 }
 ```
