@@ -20,8 +20,8 @@ namespace userinterface.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(request.email))
+                return BadRequest("Email為必填欄位");
 
             try
             {
@@ -30,7 +30,7 @@ namespace userinterface.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest(new { Error = ex.Message });
+                return BadRequest(new { Error = ex.Message, Detail = ex.InnerException?.Message });
             }
         }
 
@@ -38,8 +38,8 @@ namespace userinterface.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(request.email))
+                return BadRequest("Email為必填欄位");
 
             var (success, username) = await _userService.LoginAsync(request);
             if (success)
@@ -48,8 +48,8 @@ namespace userinterface.Controllers
                 return Unauthorized(new { Message = "登入失敗，帳號或密碼錯誤" });
         }
 
-        // POST: /User/Delete
-        [HttpPost("Delete")]
+        // DELETE: /User/Delete
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete([FromBody] UserDeleteRequest request)
         {
             if (!ModelState.IsValid)
@@ -67,6 +67,34 @@ namespace userinterface.Controllers
         {
            var users = await _userService.GetAllUsersAsync();
            return Ok(users);
+        }
+
+        // PATCH: /User/Update
+        [HttpPatch("Update")]
+        public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var (success, message) = await _userService.UpdateUserAsync(request);
+            if (success)
+                return Ok(new { Message = message });
+            else
+                return BadRequest(new { Message = message });
+        }
+
+        // PATCH: /User/Uppwd
+        [HttpPatch("Uppwd")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UserPasswordUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var (success, message) = await _userService.UpdatePasswordAsync(request);
+            if (success)
+                return Ok(new { Message = message });
+            else
+                return BadRequest(new { Message = message });
         }
     }
 }

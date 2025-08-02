@@ -14,6 +14,7 @@
   "ID": 114514,  // 可選
   "username": "bigred",
   "password": "msg_is_king_of_flavor",
+  "email": "kang0726@gmail.com",
   "status":"admin" // 可選
 }
 ```
@@ -54,18 +55,14 @@
 **Request 範例**
 ```json
 {
-    "admin_ID": 20050224,
-    "admin_pwd":"kang0926",
-    "user_ID":114514
+    "user_ID": 20050224
 }
 ```
 
 **Response 範例**
 ```json
 {
-    "admin_ID": 20050224,
-    "admin_pwd":"kang0926",
-    "user_ID":114514
+    "message": "刪除成功"
 }
 ```
 ### 4. `/User/all`
@@ -74,22 +71,58 @@
 ```json
 [
     {
-        "id": 114514,
-        "name": "bigred"
+        "id": 2,
+        "name": "test",
+        "status": "test",
+        "email": "kang0926@gmail.com"
     },
     {
-        "id": 20050229,
-        "name": "AAA"
+        "id": 4,
+        "name": "kang0926",
+        "status": "bigred",
+        "email": "RRR@gmail.com"
     },
     {
-        "id": 20050230,
-        "name": "bigred"
-    },
-    {
-        "id": 20050231,
-        "name": "kang0926"
+        "id": 5,
+        "name": "kang0926",
+        "status": "users",
+        "email": "FFF@gmail.com"
     }
 ]
+```
+### 5. `/User/Update`
+
+**Request 範例**
+```json
+{
+    "Id":2,
+    "name":"test", // 可選
+    "status":"ppp" // 可選
+}
+```
+
+**Response 範例**
+```json
+{
+    "message": "更新成功"
+}
+```
+### 6. `/User/Uppwd`
+
+**Request 範例**
+```json
+{
+    "Id":2,
+    "OldPassword":"DDD",
+    "NewPassword":"XYZ"
+}
+```
+
+**Response 範例**
+```json
+{
+    "message": "密碼更新成功"
+}
 ```
 ---
 
@@ -123,5 +156,5 @@ User.cs (資料模型)
 - 我有保留.http但是我還是使用postman來測試
 - 未來嘗試使用jwt token保留使用者資料
 - 改用dto來傳輸
-- 使用orm框架取代SQL語法操作
-- 將\delet的post方法改成delete
+- 未來/updata 中根據權限不同使用者的可修改資料量(但jwt要先完成)
+- 要加忘記密碼功能?

@@ -8,6 +8,8 @@ namespace userinterface.Services
         Task<UserRegistrationResult> RegisterAsync(UserRegistrationRequest request);
         Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request);
         Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request);
+        Task<(bool Success, string? Message)> UpdateUserAsync(UserUpdateRequest request);
+        Task<(bool Success, string? Message)> UpdatePasswordAsync(UserPasswordUpdateRequest request);
         Task<IEnumerable<UserBasicInfo>> GetAllUsersAsync();
     }
 }
