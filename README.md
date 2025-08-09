@@ -43,15 +43,17 @@
 **Response 範例**
 ```json
 {
-  "message": "登入成功",
-  "username": "bigred"
+    "message": "登入成功",
+    "username": "kang0926",
+    "status": "user",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBQUFAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJrYW5nMDkyNiIsImVtYWlsIjoiQUFBQGdtYWlsLmNvbSIsInN0YXR1cyI6InVzZXIiLCJleHAiOjE3NTQ3MjEyODQsImlzcyI6Im1lIiwiYXVkIjoieW91cl9tb20ifQ.75KzbKQa81kbs5jEtSuXvPfmScfHZzE6plFtUcc_FxA"
 }
 ```
 
 ---
 
 ### 3. `/User/Delete`
-
+需要 Bearer Token，且 JWT 內的 status 必須為 admin。
 **Request 範例**
 ```json
 {
@@ -66,7 +68,7 @@
 }
 ```
 ### 4. `/User/all`
-
+需要 Bearer Token，且 JWT 內的 status 必須為 admin。
 **Get 範例**
 ```json
 [
@@ -91,7 +93,7 @@
 ]
 ```
 ### 5. `/User/Update`
-
+需要 Bearer Token，且 JWT 內的 status 必須為 admin。
 **Request 範例**
 ```json
 {
@@ -154,7 +156,6 @@ User.cs (資料模型)
 
 - 若於實驗室電腦操作，MySQL 連線資訊可使用：`172.16.3.50:13306`
 - 我有保留.http但是我還是使用postman來測試
-- 未來嘗試使用jwt token保留使用者資料
 - 改用dto來傳輸
 - 未來/updata 中根據權限不同使用者的可修改資料量(但jwt要先完成)
-- 要加忘記密碼功能?
+- rbac

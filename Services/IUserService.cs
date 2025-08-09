@@ -6,7 +6,7 @@ namespace userinterface.Services
     public interface IUserService
     {
         Task<UserRegistrationResult> RegisterAsync(UserRegistrationRequest request);
-        Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request);
+        Task<(bool Success, string? Username, string? Status)> LoginAsync(UserLoginRequest request);
         Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request);
         Task<(bool Success, string? Message)> UpdateUserAsync(UserUpdateRequest request);
         Task<(bool Success, string? Message)> UpdatePasswordAsync(UserPasswordUpdateRequest request);

@@ -63,15 +63,16 @@ namespace userinterface.Services
             };
         }
 
-        public async Task<(bool Success, string? Username)> LoginAsync(UserLoginRequest request)
+        // 變更為回傳 Status
+        public async Task<(bool Success, string? Username, string? Status)> LoginAsync(UserLoginRequest request)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.email == request.email); // 用email查詢
-            if (user == null) return (false, null);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.email == request.email);
+            if (user == null) return (false, null, null);
             var hash = HashPassword(request.Password ?? "", user.Msg);
             if (hash == user.PasswordHash)
-                return (true, user.Name);
+                return (true, user.Name, user.Status);
             else
-                return (false, null);
+                return (false, null, null);
         }
 
         public async Task<(bool Success, string? Message)> DeleteUserAsync(UserDeleteRequest request)
