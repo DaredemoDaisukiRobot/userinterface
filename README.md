@@ -109,23 +109,6 @@
     "message": "更新成功"
 }
 ```
-### 6. `/User/Uppwd`
-
-**Request 範例**
-```json
-{
-    "Id":2,
-    "OldPassword":"DDD",
-    "NewPassword":"XYZ"
-}
-```
-
-**Response 範例**
-```json
-{
-    "message": "密碼更新成功"
-}
-```
 ---
 
 ## 密碼加密方法
@@ -152,10 +135,50 @@ User.cs (資料模型)
 
 ---
 
+## 已改用 RBAC
+以角色 (roles) + 權限 (permissions) 取代原本使用者欄位 status。  
+JWT 內含：
+- ClaimTypes.Role: 多個角色
+- perm: 多個權限 (edit_user, delete_user, permission_editing, view)
+
+| API | 需求權限 |
+|-----|----------|
+| /User/all | view |
+| /User/Update | edit_user |
+| /User/Delete | delete_user |
+| /User/AssignRole | permission_editing |
+
+### Login Response 範例
+```json
+{
+  "message": "登入成功",
+  "userId": 1,
+  "username": "alice",
+  "roles": ["user"],
+  "permissions": ["view"],
+  "token": "<JWT>"
+}
+```
+
+### 新增角色指派
+POST /User/AssignRole
+```json
+{
+  "userId": 3,
+  "roleId": 1
+}
+```
+
+### 權限資料表示意
+roles, permissions, role_permissions, user_roles 已存在，註冊預設自動指派 user 角色 (名稱為 user)。
+
+---
+
 ## 備註
 
 - 若於實驗室電腦操作，MySQL 連線資訊可使用：`172.16.3.50:13306`
 - 我有保留.http但是我還是使用postman來測試
 - 改用dto來傳輸
 - 未來/updata 中根據權限不同使用者的可修改資料量(但jwt要先完成)
-- rbac
+- 新增刪除角色
+- 讓user可以改自己的資料
