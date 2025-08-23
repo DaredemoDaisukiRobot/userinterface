@@ -14,8 +14,7 @@
   "ID": 114514,  // 可選
   "username": "bigred",
   "password": "msg_is_king_of_flavor",
-  "email": "kang0726@gmail.com",
-  "status":"admin" // 可選
+  "email": "kang0726@gmail.com"
 }
 ```
 
@@ -23,8 +22,7 @@
 ```json
 {
   "message": "註冊成功",
-  "userId": 114514,
-  "status": "admin"
+  "userId": 114514
 }
 ```
 
@@ -44,16 +42,25 @@
 ```json
 {
     "message": "登入成功",
+    "userId": 9,
     "username": "kang0926",
-    "status": "user",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBQUFAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJrYW5nMDkyNiIsImVtYWlsIjoiQUFBQGdtYWlsLmNvbSIsInN0YXR1cyI6InVzZXIiLCJleHAiOjE3NTQ3MjEyODQsImlzcyI6Im1lIiwiYXVkIjoieW91cl9tb20ifQ.75KzbKQa81kbs5jEtSuXvPfmScfHZzE6plFtUcc_FxA"
+    "roles": [
+        "admin"
+    ],
+    "permissions": [
+        "edit_user",
+        "delete_user",
+        "permission_editing",
+        "view"
+    ],
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI5Iiwic3ViIjoiRkBnbWFpbC5jb20iLCJlbWFpbCI6IkZAZ21haWwuY29tIiwidW5pcXVlX25hbWUiOiJrYW5nMDkyNiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImFkbWluIiwicGVybSI6WyJlZGl0X3VzZXIiLCJkZWxldGVfdXNlciIsInBlcm1pc3Npb25fZWRpdGluZyIsInZpZXciXSwiZXhwIjoxNzU1OTM1NTg1LCJpc3MiOiJtZSIsImF1ZCI6InlvdXJfbW9tIn0.SabeC4HPKcBaGPpXZxnVujAyQLmJQsJjJ6hMuOyctgo"
 }
 ```
 
 ---
 
 ### 3. `/User/Delete`
-需要 Bearer Token，且 JWT 內的 status 必須為 admin。
+需要 Bearer Token
 **Request 範例**
 ```json
 {
@@ -68,7 +75,7 @@
 }
 ```
 ### 4. `/User/all`
-需要 Bearer Token，且 JWT 內的 status 必須為 admin。
+需要 Bearer Token
 **Get 範例**
 ```json
 [
@@ -92,14 +99,13 @@
     }
 ]
 ```
-### 5. `/User/Update`
-需要 Bearer Token，且 JWT 內的 status 必須為 admin。
+### 5. `/User/Update
+需要 Bearer Token
 **Request 範例**
 ```json
 {
     "Id":2,
-    "name":"test", // 可選
-    "status":"ppp" // 可選
+    "name":"test" // 可選
 }
 ```
 
@@ -107,6 +113,16 @@
 ```json
 {
     "message": "更新成功"
+}
+```
+
+
+### 5. `/User/AssignRole`
+需要 Bearer Token
+```json
+{
+  "userId": 3,
+  "roleId": 1
 }
 ```
 ---
@@ -148,26 +164,6 @@ JWT 內含：
 | /User/Delete | delete_user |
 | /User/AssignRole | permission_editing |
 
-### Login Response 範例
-```json
-{
-  "message": "登入成功",
-  "userId": 1,
-  "username": "alice",
-  "roles": ["user"],
-  "permissions": ["view"],
-  "token": "<JWT>"
-}
-```
-
-### 新增角色指派
-POST /User/AssignRole
-```json
-{
-  "userId": 3,
-  "roleId": 1
-}
-```
 
 ### 權限資料表示意
 roles, permissions, role_permissions, user_roles 已存在，註冊預設自動指派 user 角色 (名稱為 user)。
