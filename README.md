@@ -166,7 +166,7 @@ JWT 內含：
 
 
 ### 權限資料表示意
-roles, permissions, role_permissions, user_roles 已存在，註冊預設自動指派 user 角色 (名稱為 user)。
+users,roles, permissions, role_permissions, user_roles，註冊預設自動指派 user 角色 (名稱為 user)。
 
 ---
 
