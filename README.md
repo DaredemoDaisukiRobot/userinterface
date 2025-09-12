@@ -192,3 +192,7 @@ users,roles, permissions, role_permissions, user_roles，註冊預設自動指�
 - user 只能看自己
 - 查看後端存活ping pong
 - roles修改api
+- 緩存，快取
+- 追蹤jaegertracing
+- 資料庫分頁查詢
+- [jaegertracing](https://huggingface.co/datasets/iGeniusAI/FinReflectKG)

@@ -7,6 +7,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 監聽所有網卡的 8964 port
+builder.WebHost.UseUrls("http://0.0.0.0:8964");
+
 builder.Services.AddControllers();
 
 // 讀取 CORS 白名單
@@ -26,8 +29,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection") ??
-        "Server=26.9.28.191;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;",
-        ServerVersion.AutoDetect("Server=26.9.28.191;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;")
+        "Server=172.16.3.50;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;",
+        ServerVersion.AutoDetect("Server=172.16.3.50;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;")
     )
 );
 
