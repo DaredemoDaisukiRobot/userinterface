@@ -5,8 +5,8 @@
 ---
 
 ## API 說明
-
-### 1. `/User/Register`
+### Userset
+#### 1. `/User/Register`
 
 **Request 範例**
 ```json
@@ -28,7 +28,7 @@
 
 ---
 
-### 2. `/User/Login`
+#### 2. `/User/Login`
 
 **Request 範例**
 ```json
@@ -59,7 +59,7 @@
 
 ---
 
-### 3. `/User/Delete`
+#### 3. `/User/Delete`
 需要 Bearer Token
 **Request 範例**
 ```json
@@ -74,7 +74,7 @@
     "message": "刪除成功"
 }
 ```
-### 4. `/User/all`
+#### 4. `/User/all`
 需要 Bearer Token
 **Get 範例**
 ```json
@@ -99,7 +99,7 @@
     }
 ]
 ```
-### 5. `/User/Update
+#### 5. `/User/Update
 需要 Bearer Token
 **Request 範例**
 ```json
@@ -117,7 +117,7 @@
 ```
 
 
-### 6. `/User/AssignRole`
+#### 6. `/User/AssignRole`
 需要 Bearer Token
 ```json
 {
@@ -125,7 +125,9 @@
   "roleId": 1
 }
 ```
-### 7. `/114514`(存活測試)
+### memoryset
+#### 1. `/memory`
+### 存活測試. `/114514`
 **Get 範例**
 ```json
 {
@@ -190,9 +192,8 @@ users,roles, permissions, role_permissions, user_roles，註冊預設自動指�
 - 讓user可以改自己的資料
 - 新增查看自己
 - user 只能看自己
-- 查看後端存活ping pong
 - roles修改api
-- 緩存，快取
-- 追蹤jaegertracing
-- 資料庫分頁查詢
+- 緩存，快取(3)
+- 追蹤jaegertracing(2)
+- 資料庫分頁查詢(1)
 - [jaegertracing](https://huggingface.co/datasets/iGeniusAI/FinReflectKG)

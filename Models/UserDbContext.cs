@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace userinterface.Models
 {
-    public class UserDbContext : DbContext
+    public partial class UserDbContext : DbContext
     {
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
 
@@ -11,6 +11,7 @@ namespace userinterface.Models
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<UserRole> UserRoles => Set<UserRole>();
+        public DbSet<FinreflectkgFull> FinreflectkgFull { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,13 @@ namespace userinterface.Models
                 .HasOne(rp => rp.Permission)
                 .WithMany(p => p.RolePermissions)
                 .HasForeignKey(rp => rp.PermissionId);
+
+            modelBuilder.Entity<FinreflectkgFull>(entity =>
+            {
+                entity.ToTable("finreflectkg_full"); // Database=memory 已由連線字串指定
+                entity.HasKey(e => e.Id);
+                // 其餘欄位已透過 [Column] 屬性對應
+            });
         }
     }
 }

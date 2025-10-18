@@ -25,16 +25,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 加入 EF Core DbContext
+// 加入 EF Core DbContext（分別對應兩個資料庫）
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection") ??
-        "Server=172.16.3.50;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;",
-        ServerVersion.AutoDetect("Server=172.16.3.50;Port=13306;Database=userdatabase;Uid=ccc;Pwd=bigred;")
-    )
-);
+{
+    var csUser = builder.Configuration.GetConnectionString("UserDb"); // userdatabase
+    options.UseMySql(csUser, ServerVersion.AutoDetect(csUser));
+});
+builder.Services.AddDbContext<MemoryDbContext>(options =>
+{
+    var csMemory = builder.Configuration.GetConnectionString("DefaultConnection"); // memory
+    options.UseMySql(csMemory, ServerVersion.AutoDetect(csMemory));
+});
 
+// 服務註冊（若已存在可忽略）
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMemoryService, MemoryService>();
 
 // 加入 JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -72,6 +77,7 @@ app.MapGet("/114514", () => new Dictionary<string, object>
     ["hobbies"] = new[] { "Working out", "Sunbathing" },
     ["favorites"] = new[] { "Black tea", "Ramen" }
 });
+
 
 app.MapControllers();
 
