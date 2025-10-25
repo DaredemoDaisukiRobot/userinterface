@@ -76,7 +76,6 @@ namespace userinterface.Services
             {
                 Start = start,
                 Quantity = items.Count,
-                Total = -1, // 不計算總數，避免慢查詢
                 Items = items
             };
         }
