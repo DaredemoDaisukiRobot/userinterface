@@ -194,6 +194,7 @@ users,roles, permissions, role_permissions, user_roles，註冊預設自動指�
 - user 只能看自己
 - roles修改api
 - 緩存，快取(3)
-- 追蹤(2)
+- 追蹤OpenTelemetry監測api時間進而製作緩存(2)
 - 資料庫分頁查詢(1)#完成
+- 篩選排序(1.1)
 - [jaegertracing](https://huggingface.co/datasets/iGeniusAI/FinReflectKG)
