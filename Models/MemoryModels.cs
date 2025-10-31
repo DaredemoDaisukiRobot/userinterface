@@ -8,6 +8,9 @@ namespace userinterface.Models
         public int Start { get; set; }
         public int Quantity { get; set; }
         public List<Dictionary<string, object?>> Items { get; set; } = new();
+
+        // 回傳最後一筆資料的 id（若沒有則為 null）
+        public int? LastId { get; set; }
     }
 
     [Table("finreflectkg_full")]

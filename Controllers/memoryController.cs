@@ -28,6 +28,11 @@ namespace userinterface.Controllers
             var result = await _memoryService.SearchAsync(Start, Quantity);
             return Ok(result);
         }
-        
+        [HttpGet("Filter/{Start}/{Quantity}/{Criteria}")]
+        public async Task<IActionResult> Filter(int Start, int Quantity, string Criteria)
+        {
+            var result = await _memoryService.FilterAsync(Start, Quantity, Criteria);
+            return Ok(result);
+        }
     }
 }
